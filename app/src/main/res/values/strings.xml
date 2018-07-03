@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StartOnUnlock</string>
+    <string name="enable_switch">Enable StartOnUnlock</string>
+</resources>
