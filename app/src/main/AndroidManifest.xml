@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <service
+            android:name=".BackgroundService"
+            android:icon="@drawable/ic_launcher_background"
+            android:label="QuickStudyBackgroundService">
+        </service>
+    </application>
 </manifest>

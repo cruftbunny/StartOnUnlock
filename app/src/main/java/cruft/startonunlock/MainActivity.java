@@ -18,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Switch enableSwitch = findViewById(R.id.enable_switch);
+        final Intent BackgroundService = new Intent(this, BackgroundService.class);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
         boolean enabled = sp.getBoolean("enabled", false);
 
         if(!enabled) {
@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
             Log.w("CRUFT", "StartOnUnlock is currently set to enabled");
             enableSwitch.setChecked(true);
 
-            // TODO: start background service
+            stopService(BackgroundService);
+            startService(BackgroundService);
         }
 
         enableSwitch.setOnClickListener(new View.OnClickListener() {
@@ -46,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.w("CRUFT", "StartOnUnlock enabled via switch");
 
-                    // TODO: start background service
-
+                    stopService(BackgroundService);
+                    startService(BackgroundService);
                 }
                 else if (!enableSwitch.isChecked()){
 
