@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">StartOnUnlock</string>
     <string name="enable_switch">Enable StartOnUnlock</string>
+    <string name="chooser_button">Choose app</string>
 </resources>

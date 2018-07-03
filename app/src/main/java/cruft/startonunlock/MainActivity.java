@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,8 +59,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button chooserButton = findViewById(R.id.chooser_button);
+        chooserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Log.w("CRUFT", "Button pressed. Starting AppChooser");
+
+                // TODO: start app chooser
+
+            }
+        });
     }
-
-
 }
