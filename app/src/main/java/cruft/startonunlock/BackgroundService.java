@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BackgroundService extends Service {
@@ -35,11 +37,15 @@ public class BackgroundService extends Service {
         public void onReceive(Context context, Intent intent) {
 
             if(intent.getAction().equals(Intent.ACTION_SCREEN_ON)){
-                Log.w("CRUFT", "Screen went on");
+                Log.w("CRUFT", "Screen on. Launch chosen app");
 
-            }
-            else if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
-                Log.w("CRUFT","Screen went off");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                String appName = sp.getString("appName", null);
+
+                if (appName != null) {
+                    Intent LaunchAppIntent = context.getPackageManager().getLaunchIntentForPackage(appName);
+                    context.startActivity(LaunchAppIntent);
+                }
             }
         }
     }

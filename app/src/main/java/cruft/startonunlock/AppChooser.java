@@ -1,7 +1,9 @@
 package cruft.startonunlock;
 
 import android.app.ListActivity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
@@ -66,5 +69,22 @@ public class AppChooser extends ListActivity {
 
             icon.setImageDrawable(getItem(position).loadIcon(pm));
         }
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v,
+                                   int position, long id) {
+
+        ResolveInfo launchable = adapter.getItem(position);
+        ActivityInfo activity = launchable.activityInfo;
+        ComponentName name = new ComponentName(activity.applicationInfo.packageName,
+                activity.name);
+
+        String pack_name = name.getPackageName();
+
+        Intent intentMessage = new Intent();
+        intentMessage.putExtra("MESSAGE_package_name", pack_name);
+        setResult(1, intentMessage);
+        finish();
     }
 }

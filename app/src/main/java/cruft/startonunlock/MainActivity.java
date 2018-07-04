@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
 
                     Log.w("CRUFT", "StartOnUnlock enabled via switch");
-
                 }
                 else if (!enableSwitch.isChecked()){
 
@@ -64,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean enabled = sp.getBoolean("enabled", false);
 
-        final Switch enableSwitch = findViewById(R.id.enable_switch);
-        final Intent BackgroundService = new Intent(this, BackgroundService.class);
+        Switch enableSwitch = findViewById(R.id.enable_switch);
+        Intent BackgroundService = new Intent(this, BackgroundService.class);
 
         if(!enabled) {
             Log.w("CRUFT", "StartOnUnlock is currently set to disabled");
@@ -75,8 +74,28 @@ public class MainActivity extends AppCompatActivity {
         else {
             Log.w("CRUFT", "StartOnUnlock is currently set to enabled");
             enableSwitch.setChecked(true);
-
             startService(BackgroundService);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(null != data){
+            if(requestCode == 1){
+                // app successfully chosen
+
+                String message=data.getStringExtra("MESSAGE_package_name");
+
+                Log.w("CRUFT", "Chosen app: " + message);
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("appName", message);
+                editor.apply();
+            }
         }
     }
 }
