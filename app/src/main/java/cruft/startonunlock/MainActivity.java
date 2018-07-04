@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.w("CRUFT", "Button pressed. Starting AppChooser");
 
-                // TODO: start app chooser
-
+                Intent StartAppChooser = new Intent(getApplicationContext(), AppChooser.class);
+                startActivityForResult(StartAppChooser, 1);
             }
         });
     }
