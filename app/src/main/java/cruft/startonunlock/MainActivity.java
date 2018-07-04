@@ -18,21 +18,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Switch enableSwitch = findViewById(R.id.enable_switch);
-        final Intent BackgroundService = new Intent(this, BackgroundService.class);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean enabled = sp.getBoolean("enabled", false);
-
-        if(!enabled) {
-            Log.w("CRUFT", "StartOnUnlock is currently set to disabled");
-        }
-        else {
-            Log.w("CRUFT", "StartOnUnlock is currently set to enabled");
-            enableSwitch.setChecked(true);
-
-            stopService(BackgroundService);
-            startService(BackgroundService);
-        }
+        isEnabled();
 
         enableSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.w("CRUFT", "StartOnUnlock enabled via switch");
 
-                    stopService(BackgroundService);
-                    startService(BackgroundService);
                 }
                 else if (!enableSwitch.isChecked()){
 
@@ -57,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.w("CRUFT", "StartOnUnlock disabled via switch");
                 }
+
+                isEnabled();
             }
         });
 
@@ -71,5 +58,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void isEnabled() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean enabled = sp.getBoolean("enabled", false);
+
+        final Switch enableSwitch = findViewById(R.id.enable_switch);
+        final Intent BackgroundService = new Intent(this, BackgroundService.class);
+
+        if(!enabled) {
+            Log.w("CRUFT", "StartOnUnlock is currently set to disabled");
+            enableSwitch.setChecked(false);
+            stopService(BackgroundService);
+        }
+        else {
+            Log.w("CRUFT", "StartOnUnlock is currently set to enabled");
+            enableSwitch.setChecked(true);
+
+            startService(BackgroundService);
+        }
     }
 }

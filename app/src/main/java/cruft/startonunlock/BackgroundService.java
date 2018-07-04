@@ -17,6 +17,7 @@ public class BackgroundService extends Service {
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
+    private BroadcastReceiver screenReceiver = null;
 
     @Override
     public void onCreate() {
@@ -35,6 +36,7 @@ public class BackgroundService extends Service {
 
             if(intent.getAction().equals(Intent.ACTION_SCREEN_ON)){
                 Log.w("CRUFT", "Screen went on");
+
             }
             else if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
                 Log.w("CRUFT","Screen went off");
@@ -50,6 +52,16 @@ public class BackgroundService extends Service {
         mServiceHandler.sendMessage(message);
 
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(this.screenReceiver != null) {
+            unregisterReceiver(this.screenReceiver);
+            Log.w("CRUFT", "Unregistering broadcast receiver");
+        }
     }
 
     @Override
@@ -70,10 +82,15 @@ public class BackgroundService extends Service {
             // start BroadcastReceiver
             IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
             filter.addAction(Intent.ACTION_SCREEN_OFF);
-            BroadcastReceiver mReceiver = new ScreenReceiver();
-            registerReceiver(mReceiver, filter);
+            screenReceiver = new ScreenReceiver();
 
-            Log.w("CRUFT", "Creating broadcast receiver");
+            try {
+                registerReceiver(screenReceiver, filter);
+                Log.w("CRUFT", "Registering broadcast receiver");
+            }
+            catch (IllegalArgumentException failedToRegister) {
+                Log.w("CRUFT", "Failed to register broadcast receiver");
+            }
         }
     }
 }
